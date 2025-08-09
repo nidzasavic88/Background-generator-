@@ -1,40 +1,36 @@
-var css = document.querySelector("h3");
-var color1 = document.querySelector(".color1");
-var color2 = document.querySelector(".color2");
-var body = document.getElementById("gradient");
-var randomButton = document.getElementById("Random");
+const cssDisplay = document.querySelector("h3");
+const colorInputs = document.querySelectorAll(".color1, .color2");
+const body = document.getElementById("gradient");
+const randomButton = document.getElementById("Random");
 
-function setGradient() {
-	body.style.background = 
-	"linear-gradient(to right, " 
-	+ color1.value 
-	+ ", " 
-	+ color2.value 
-	+ ")";
+// Function to set the gradient background
+const setGradient = () => {
+  const [color1, color2] = Array.from(colorInputs).map(input => input.value);
+  body.style.background = `linear-gradient(to right, ${color1}, ${color2})`;
+  cssDisplay.textContent = `${body.style.background};`;
+};
 
-	css.textContent = body.style.background + ";";
-}
+// Function to generate a random hex color
+const getRandomColor = () => {
+  const letters = '0123456789ABCDEF';
+  return '#' + Array.from({ length: 6 }, () => letters[Math.floor(Math.random() * 16)]).join('');
+};
 
-function getRandomColor() {
-	var letters = '0123456789ABCDEF';
-	var color = '#';
-	for (var i = 0; i < 6; i++) {
-	  color += letters[Math.floor(Math.random() * 16)];
-	}
-	return color;
-  }
+// Function to assign random colors and update gradient
+const randomColors = () => {
+  colorInputs.forEach(input => {
+    input.value = getRandomColor();
+  });
+  setGradient();
+};
 
-function randomColors(){
-	color1.value = getRandomColor();
-	color2.value = getRandomColor();
-
-	setGradient();
-}
-
+// Initialize the gradient on page load
 setGradient();
 
-color1.addEventListener("input", setGradient);
+// Add event listeners for color inputs
+colorInputs.forEach(input => {
+  input.addEventListener('input', setGradient);
+});
 
-color2.addEventListener("input", setGradient);
-
-randomButton.addEventListener("click", randomColors);
+// Add event listener for the random button
+randomButton.addEventListener('click', randomColors);
